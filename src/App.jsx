@@ -41,19 +41,18 @@ function App() {
   const [currentLang, setCurrentLang] = useState('en');
   const t = translations[currentLang];
   
-  // Calculate days until wedding
   const weddingDate = new Date('2025-07-19');
   const today = new Date();
   const daysUntil = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
 
   return (
-    <div className="min-h-screen bg-beige-50">
+    <div className="min-h-screen bg-gradient-radial from-champagne-50 via-champagne-100 to-champagne-200">
       {/* Language Switcher */}
       <div className="fixed top-6 right-6 z-50">
         <select 
           value={currentLang}
           onChange={(e) => setCurrentLang(e.target.value)}
-          className="px-3 py-1 border border-charcoal-700 rounded-none bg-transparent text-sm"
+          className="px-3 py-1 border border-charcoal-700 rounded-none bg-transparent text-sm hover:border-charcoal-900 transition-colors duration-300"
         >
           <option value="en">EN</option>
           <option value="de">DE</option>
@@ -61,14 +60,14 @@ function App() {
       </div>
 
       {/* Navigation */}
-      <nav className="pt-8 pb-4">
+      <nav className="pt-8 pb-4 border-b border-sage-300/30">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-8 text-sm tracking-wider">
             {Object.entries(t.nav).map(([key, value]) => (
               <a 
                 key={key}
                 href={`#${key}`} 
-                className="text-charcoal-700 hover:text-charcoal-900 transition-colors duration-200"
+                className="text-charcoal-700 hover:text-charcoal-900 transition-all duration-300 hover:border-b hover:border-sage-300"
               >
                 {value}
               </a>
@@ -78,34 +77,36 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-16 pb-32 text-center">
-        <p className="text-lg text-charcoal-700 mb-6 font-display italic">
+      <div className="container mx-auto px-4 pt-32 pb-40 text-center">
+        <p className="text-lg text-charcoal-700 mb-8 font-display italic tracking-wide">
           {t.hero.title}
         </p>
-        <h1 className="text-4xl md:text-6xl text-charcoal-900 mb-6 font-display">
+        <h1 className="text-5xl md:text-7xl text-charcoal-900 mb-12 font-display leading-tight">
           {t.hero.names}
         </h1>
-        <div className="space-y-4">
-          <p className="text-sm tracking-widest text-charcoal-700">
+        <div className="space-y-6">
+          <p className="text-sm tracking-widest text-charcoal-700 border-b border-t border-sage-300/50 py-4 inline-block px-8">
             JULY 19, 2025 · {t.hero.location}
           </p>
-          <p className="text-sm tracking-widest text-charcoal-700">
+          <p className="text-sm tracking-widest text-charcoal-700 font-light">
             {daysUntil} {t.hero.countdown}
           </p>
         </div>
       </div>
 
       {/* Event Details Section */}
-      <div className="border-t border-b border-charcoal-700 py-24">
-        <div className="container mx-auto px-4">
+      <div className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-radial from-sage-100/20 via-sage-200/10 to-transparent"></div>
+        <div className="container mx-auto px-4 relative">
           <div className="grid md:grid-cols-2 gap-16 text-center">
-            <div>
-              <h2 className="text-3xl font-display mb-2">JULY 19,</h2>
-              <p className="text-xl">2025</p>
+            <div className="group">
+              <h2 className="text-4xl md:text-5xl font-display mb-3 tracking-wide">JULY 19,</h2>
+              <p className="text-2xl tracking-wider font-light transition-all duration-300 group-hover:text-sage-400">2025</p>
             </div>
-            <div>
-              <h2 className="text-3xl font-display mb-2">WÜRZBURG</h2>
-              <p className="text-xl">GERMANY</p>
+            <div className="group relative">
+              <div className="absolute -left-8 top-1/2 transform -translate-y-1/2 h-16 w-px bg-sage-300/50 hidden md:block"></div>
+              <h2 className="text-4xl md:text-5xl font-display mb-3 tracking-wide">WÜRZBURG</h2>
+              <p className="text-2xl tracking-wider font-light transition-all duration-300 group-hover:text-sage-400">GERMANY</p>
             </div>
           </div>
         </div>
