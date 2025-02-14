@@ -7,16 +7,20 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['Playfair Display', 'serif'],
+        sans: ['Montserrat', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
       },
       colors: {
-        rose: {
-          50: '#fff1f2',
-          100: '#ffe4e6',
-          500: '#f43f5e',
-          600: '#e11d48',
-          700: '#be123c',
-          900: '#881337',
+        beige: {
+          50: '#FDFBF6',
+          100: '#FAF6ED',
+          200: '#F5EDE0',
+          300: '#EFE4D3',
+        },
+        charcoal: {
+          700: '#2C2C2C',
+          800: '#262626',
+          900: '#171717',
         },
       },
     },
