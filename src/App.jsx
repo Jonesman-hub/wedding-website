@@ -1,51 +1,38 @@
 import React, { useState } from 'react';
-import { Calendar, Gift, Map, Clock, Heart, Camera, Hotel } from 'lucide-react';
 
 const translations = {
   en: {
     nav: {
       home: "Home",
-      story: "Our Story",
-      schedule: "Schedule",
-      registry: "Registry",
-      venue: "Venue",
       photos: "Photos",
-      accommodations: "Accommodations"
+      party: "Wedding Party",
+      qa: "Q + A",
+      travel: "Travel",
+      todo: "Things to Do",
+      contact: "Contact"
     },
     hero: {
-      title: "Our Wedding",
-      date: "July 17, 2025",
-      countdown: "Days until we say 'I do'"
-    },
-    schedule: {
-      title: "Wedding Day Schedule",
-      ceremony: "Ceremony",
-      cocktail: "Cocktail Hour",
-      reception: "Reception",
-      party: "Party"
+      title: "The Wedding of",
+      names: "JONAH & JUDITH",
+      location: "WÜRZBURG, GERMANY",
+      countdown: "DAYS TO GO!"
     }
   },
   de: {
     nav: {
-      home: "Startseite",
-      story: "Unsere Geschichte",
-      schedule: "Zeitplan",
-      registry: "Geschenkliste",
-      venue: "Lokalität",
+      home: "Start",
       photos: "Fotos",
-      accommodations: "Unterkünfte"
+      party: "Hochzeitsgesellschaft",
+      qa: "F + A",
+      travel: "Anreise",
+      todo: "Aktivitäten",
+      contact: "Kontakt"
     },
     hero: {
-      title: "Unsere Hochzeit",
-      date: "17. Juli 2025",
-      countdown: "Tage bis zum Ja-Wort"
-    },
-    schedule: {
-      title: "Tagesablauf",
-      ceremony: "Trauung",
-      cocktail: "Sektempfang",
-      reception: "Empfang",
-      party: "Feier"
+      title: "Die Hochzeit von",
+      names: "JONAH & JUDITH",
+      location: "WÜRZBURG, DEUTSCHLAND",
+      countdown: "TAGE BIS ZUR HOCHZEIT!"
     }
   }
 };
@@ -55,94 +42,74 @@ function App() {
   const t = translations[currentLang];
   
   // Calculate days until wedding
-  const weddingDate = new Date('2025-07-17');
+  const weddingDate = new Date('2025-07-19');
   const today = new Date();
   const daysUntil = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-beige-50">
       {/* Language Switcher */}
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-6 right-6 z-50">
         <select 
           value={currentLang}
           onChange={(e) => setCurrentLang(e.target.value)}
-          className="px-3 py-1 border rounded-md bg-white shadow-sm"
+          className="px-3 py-1 border border-charcoal-700 rounded-none bg-transparent text-sm"
         >
-          <option value="en">English</option>
-          <option value="de">Deutsch</option>
+          <option value="en">EN</option>
+          <option value="de">DE</option>
         </select>
       </div>
 
       {/* Navigation */}
-      <nav className="bg-white shadow-md">
+      <nav className="pt-8 pb-4">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-4 py-4">
-            <a href="#" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-500">
-              <Heart size={18} />
-              <span>{t.nav.home}</span>
-            </a>
-            <a href="#story" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-500">
-              <Clock size={18} />
-              <span>{t.nav.story}</span>
-            </a>
-            <a href="#schedule" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-500">
-              <Calendar size={18} />
-              <span>{t.nav.schedule}</span>
-            </a>
-            <a href="#registry" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-500">
-              <Gift size={18} />
-              <span>{t.nav.registry}</span>
-            </a>
-            <a href="#venue" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-500">
-              <Map size={18} />
-              <span>{t.nav.venue}</span>
-            </a>
-            <a href="#photos" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-500">
-              <Camera size={18} />
-              <span>{t.nav.photos}</span>
-            </a>
-            <a href="#accommodations" className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-rose-500">
-              <Hotel size={18} />
-              <span>{t.nav.accommodations}</span>
-            </a>
+          <div className="flex flex-wrap justify-center gap-8 text-sm tracking-wider">
+            {Object.entries(t.nav).map(([key, value]) => (
+              <a 
+                key={key}
+                href={`#${key}`} 
+                className="text-charcoal-700 hover:text-charcoal-900 transition-colors duration-200"
+              >
+                {value}
+              </a>
+            ))}
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <div className="relative h-96 bg-rose-50">
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <h1 className="text-5xl font-serif text-rose-900 mb-4">{t.hero.title}</h1>
-          <p className="text-2xl text-rose-700 mb-8">{t.hero.date}</p>
-          <div className="bg-white/80 backdrop-blur-sm rounded-lg px-6 py-3 shadow-lg">
-            <p className="text-lg text-rose-600">
-              {t.hero.countdown}: <span className="font-bold">{daysUntil}</span>
-            </p>
-          </div>
+      <div className="container mx-auto px-4 pt-16 pb-32 text-center">
+        <p className="text-lg text-charcoal-700 mb-6 font-display italic">
+          {t.hero.title}
+        </p>
+        <h1 className="text-4xl md:text-6xl text-charcoal-900 mb-6 font-display">
+          {t.hero.names}
+        </h1>
+        <div className="space-y-4">
+          <p className="text-sm tracking-widest text-charcoal-700">
+            JULY 19, 2025 · {t.hero.location}
+          </p>
+          <p className="text-sm tracking-widest text-charcoal-700">
+            {daysUntil} {t.hero.countdown}
+          </p>
         </div>
       </div>
 
-      {/* Schedule Section */}
-      <section id="schedule" className="py-16 bg-white">
+      {/* Event Details Section */}
+      <div className="border-t border-b border-charcoal-700 py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-serif text-center text-gray-800 mb-12">
-            {t.schedule.title}
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { time: "16:00", title: t.schedule.ceremony },
-              { time: "17:00", title: t.schedule.cocktail },
-              { time: "18:30", title: t.schedule.reception },
-              { time: "21:00", title: t.schedule.party }
-            ].map((event, index) => (
-              <div key={index} className="text-center p-6 bg-rose-50 rounded-lg">
-                <p className="text-xl font-bold text-rose-600 mb-2">{event.time}</p>
-                <p className="text-gray-700">{event.title}</p>
-              </div>
-            ))}
+          <div className="grid md:grid-cols-2 gap-16 text-center">
+            <div>
+              <h2 className="text-3xl font-display mb-2">JULY 19,</h2>
+              <p className="text-xl">2025</p>
+            </div>
+            <div>
+              <h2 className="text-3xl font-display mb-2">WÜRZBURG</h2>
+              <p className="text-xl">GERMANY</p>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
