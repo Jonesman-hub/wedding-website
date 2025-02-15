@@ -1,10 +1,94 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Upload, Move } from 'lucide-react';
+import { supabase } from '../supabase';
 
-const PhotoGallery = ({ currentLang = 'en' }) => {  // Set default value to 'en'
+const PhotoGallery = ({ currentLang = 'en' }) => {
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
-  const [layout, setLayout] = useState('grid'); // 'grid' or 'masonry'
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
+  const fetchImages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('photos')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setImages(data || []);
+    } catch (error) {
+      console.error('Error fetching images:', error.message);
+    }
+  };
+
+  const uploadImage = async (file) => {
+    try {
+      setUploading(true);
+
+      // Upload to Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('wedding-photos')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('wedding-photos')
+        .getPublicUrl(filePath);
+
+      // Save to photos table
+      const { data, error: dbError } = await supabase
+        .from('photos')
+        .insert([
+          {
+            url: publicUrl,
+            name: file.name
+          }
+        ]);
+
+      if (dbError) throw dbError;
+
+      // Refresh the image list
+      fetchImages();
+    } catch (error) {
+      console.error('Error uploading image:', error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDrop = useCallback(async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = [...e.dataTransfer.files];
+    if (files && files.length > 0) {
+      const imageFiles = files.filter(file => file.type.startsWith('image/'));
+      for (const file of imageFiles) {
+        await uploadImage(file);
+      }
+    }
+  }, []);
+
+  const handleFileInput = useCallback(async (e) => {
+    const files = [...e.target.files];
+    if (files && files.length > 0) {
+      const imageFiles = files.filter(file => file.type.startsWith('image/'));
+      for (const file of imageFiles) {
+        await uploadImage(file);
+      }
+    }
+  }, []);
 
   const translations = {
     en: {
