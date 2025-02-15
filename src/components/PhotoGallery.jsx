@@ -11,19 +11,24 @@ const PhotoGallery = ({ currentLang = 'en' }) => {
     fetchImages();
   }, []);
 
-  const fetchImages = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('photos')
-        .select('*')
-        .order('created_at', { ascending: false });
+const fetchImages = async () => {
+  try {
+    console.log('Fetching images...');
+    const { data, error } = await supabase
+      .from('photos')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setImages(data || []);
-    } catch (error) {
-      console.error('Error fetching images:', error.message);
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
     }
-  };
+    console.log('Fetched images:', data);
+    setImages(data || []);
+  } catch (error) {
+    console.error('Error fetching images:', error.message);
+  }
+};
 
   const uploadImage = async (file) => {
     try {
