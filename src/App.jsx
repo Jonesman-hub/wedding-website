@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RSVPForm, RSVPDashboard } from './components/RSVPForm';
+import TabSystem from './components/TabSystem';
 
 const translations = {
   en: {
@@ -10,9 +11,12 @@ const translations = {
       qa: "Q + A",
       travel: "Travel",
       todo: "Things to Do",
-      rsvp: "RSVP",  // Added RSVP nav item
       contact: "Contact"
     },
+    tabs: {
+      details: "Details",
+      rsvp: "RSVP"
+    }
     // ... rest of your existing translations
   },
   de: {
@@ -23,9 +27,12 @@ const translations = {
       qa: "F + A",
       travel: "Anreise",
       todo: "Aktivitäten",
-      rsvp: "RSVP",  // Added RSVP nav item
       contact: "Kontakt"
     },
+    tabs: {
+      details: "Details",
+      rsvp: "RSVP"
+    }
     // ... rest of your existing translations
   }
 };
@@ -33,6 +40,7 @@ const translations = {
 function App() {
   const [currentLang, setCurrentLang] = useState('en');
   const [rsvpList, setRsvpList] = useState([]);
+  const [activeTab, setActiveTab] = useState('details');
   const t = translations[currentLang];
   
   const weddingDate = new Date('2025-07-19');
@@ -44,17 +52,51 @@ function App() {
     // Here you would typically also send the data to a backend service
   };
 
+  const tabs = [
+    {
+      id: 'details',
+      label: {
+        en: 'Details',
+        de: 'Details'
+      },
+      content: (
+        <div className="max-w-4xl mx-auto">
+          {/* Your existing wedding details content */}
+          <h2 className="text-4xl font-display text-center mb-8">Wedding Details</h2>
+          {/* Add your wedding details content here */}
+        </div>
+      )
+    },
+    {
+      id: 'rsvp',
+      label: {
+        en: 'RSVP',
+        de: 'RSVP'
+      },
+      content: (
+        <div>
+          <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
+          <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-radial from-champagne-50 via-champagne-100 to-champagne-200">
-      {/* Your existing code... */}
-
-      {/* RSVP Section */}
-      <section id="rsvp" className="py-20 bg-gradient-radial from-sage-100/20 via-sage-200/10 to-transparent">
-        <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
-        <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
+      {/* Your existing navigation */}
+      
+      {/* Home section with tabs */}
+      <section id="home" className="py-20">
+        <TabSystem 
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          tabs={tabs}
+          currentLang={currentLang}
+        />
       </section>
 
-      {/* Rest of your existing code... */}
+      {/* Rest of your existing sections */}
     </div>
   );
 }
