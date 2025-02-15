@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { RSVPForm, RSVPDashboard } from './components/RSVPForm';
-import TabSystem from './components/TabSystem';
 
 const translations = {
   en: {
@@ -12,6 +10,12 @@ const translations = {
       travel: "Travel",
       todo: "Things to Do",
       contact: "Contact"
+    },
+    hero: {
+      title: "The Wedding of",
+      names: "JONAH & JUDITH",
+      location: "WÜRZBURG, GERMANY",
+      countdown: "DAYS TO GO!"
     }
   },
   de: {
@@ -23,130 +27,90 @@ const translations = {
       travel: "Anreise",
       todo: "Aktivitäten",
       contact: "Kontakt"
+    },
+    hero: {
+      title: "Die Hochzeit von",
+      names: "JONAH & JUDITH",
+      location: "WÜRZBURG, DEUTSCHLAND",
+      countdown: "TAGE BIS ZUR HOCHZEIT!"
     }
   }
 };
 
 function App() {
   const [currentLang, setCurrentLang] = useState('en');
-  const [rsvpList, setRsvpList] = useState([]);
-  const [activeTab, setActiveTab] = useState('details');
-  const [activeSection, setActiveSection] = useState('home');
   const t = translations[currentLang];
   
   const weddingDate = new Date('2025-07-19');
   const today = new Date();
   const daysUntil = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
 
-  const handleRSVPSubmit = (formData) => {
-    setRsvpList(prev => [...prev, formData]);
-  };
-
-  const tabs = [
-    {
-      id: 'details',
-      label: {
-        en: 'Details',
-        de: 'Details'
-      },
-      content: (
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-display text-center mb-8">Wedding Details</h2>
-          {/* Add your wedding details content here */}
-        </div>
-      )
-    },
-    {
-      id: 'rsvp',
-      label: {
-        en: 'RSVP',
-        de: 'RSVP'
-      },
-      content: (
-        <div>
-          <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
-          <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
-        </div>
-      )
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-radial from-champagne-50 via-champagne-100 to-champagne-200">
+      {/* Language Switcher */}
+      <div className="fixed top-6 right-6 z-50">
+        <select 
+          value={currentLang}
+          onChange={(e) => setCurrentLang(e.target.value)}
+          className="px-3 py-1 border border-charcoal-700 rounded-none bg-transparent text-sm hover:border-charcoal-900 transition-colors duration-300"
+        >
+          <option value="en">EN</option>
+          <option value="de">DE</option>
+        </select>
+      </div>
+
       {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b border-sage-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex justify-center space-x-8 py-4">
+      <nav className="pt-8 pb-4 border-b border-sage-300/30">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-center gap-8 text-sm tracking-wider">
             {Object.entries(t.nav).map(([key, value]) => (
-              <button
+              <a 
                 key={key}
-                onClick={() => setActiveSection(key)}
-                className={`font-display text-lg transition-colors duration-300 ${
-                  activeSection === key
-                    ? 'text-charcoal-900'
-                    : 'text-charcoal-700 hover:text-charcoal-900'
-                }`}
+                href={`#${key}`} 
+                className="text-charcoal-700 hover:text-charcoal-900 transition-all duration-300 hover:border-b hover:border-sage-300"
               >
                 {value}
-              </button>
+              </a>
             ))}
           </div>
         </div>
       </nav>
 
-      {/* Content Sections */}
-      {activeSection === 'home' && (
-        <section className="py-20">
-          <TabSystem 
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            tabs={tabs}
-            currentLang={currentLang}
-          />
-        </section>
-      )}
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 pt-32 pb-40 text-center">
+        <p className="text-lg text-charcoal-700 mb-8 font-display italic tracking-wide">
+          {t.hero.title}
+        </p>
+        <h1 className="text-5xl md:text-7xl text-charcoal-900 mb-12 font-display leading-tight">
+          {t.hero.names}
+        </h1>
+        <div className="space-y-6">
+          <p className="text-sm tracking-widest text-charcoal-700 border-b border-t border-sage-300/50 py-4 inline-block px-8">
+            JULY 19, 2025 · {t.hero.location}
+          </p>
+          <p className="text-sm tracking-widest text-charcoal-700 font-light">
+            {daysUntil} {t.hero.countdown}
+          </p>
+        </div>
+      </div>
 
-      {activeSection === 'photos' && (
-        <section className="py-20">
-          <h2 className="text-4xl font-display text-center mb-8">Photos</h2>
-          {/* Add your photos content */}
-        </section>
-      )}
-
-      {activeSection === 'party' && (
-        <section className="py-20">
-          <h2 className="text-4xl font-display text-center mb-8">Wedding Party</h2>
-          {/* Add your wedding party content */}
-        </section>
-      )}
-
-      {activeSection === 'qa' && (
-        <section className="py-20">
-          <h2 className="text-4xl font-display text-center mb-8">Q + A</h2>
-          {/* Add your Q&A content */}
-        </section>
-      )}
-
-      {activeSection === 'travel' && (
-        <section className="py-20">
-          <h2 className="text-4xl font-display text-center mb-8">Travel</h2>
-          {/* Add your travel content */}
-        </section>
-      )}
-
-      {activeSection === 'todo' && (
-        <section className="py-20">
-          <h2 className="text-4xl font-display text-center mb-8">Things to Do</h2>
-          {/* Add your things to do content */}
-        </section>
-      )}
-
-      {activeSection === 'contact' && (
-        <section className="py-20">
-          <h2 className="text-4xl font-display text-center mb-8">Contact</h2>
-          {/* Add your contact content */}
-        </section>
-      )}
+      {/* Event Details Section */}
+      <div className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-radial from-sage-100/20 via-sage-200/10 to-transparent"></div>
+        <div className="container mx-auto px-4 relative">
+          <div className="grid md:grid-cols-2 gap-16 text-center">
+            <div className="group">
+              <h2 className="text-4xl md:text-5xl font-display mb-3 tracking-wide">JULY 19,</h2>
+              <p className="text-2xl tracking-wider font-light transition-all duration-300 group-hover:text-sage-400">2025</p>
+            </div>
+            <div className="group relative">
+              <div className="absolute -left-8 top-1/2 transform -translate-y-1/2 h-16 w-px bg-sage-300/50 hidden md:block"></div>
+              <h2 className="text-4xl md:text-5xl font-display mb-3 tracking-wide">WÜRZBURG</h2>
+              <p className="text-2xl tracking-wider font-light transition-all duration-300 group-hover:text-sage-400">GERMANY</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
