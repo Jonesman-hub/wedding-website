@@ -1,3 +1,4 @@
+// PhotoGallery.jsx
 import React, { useState, useCallback, useEffect } from 'react';
 import { Upload, Move } from 'lucide-react';
 import { supabase } from '../supabase';
@@ -6,29 +7,25 @@ const PhotoGallery = ({ currentLang = 'en' }) => {
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [layout, setLayout] = useState('grid');
 
   useEffect(() => {
     fetchImages();
   }, []);
 
-const fetchImages = async () => {
-  try {
-    console.log('Fetching images...');
-    const { data, error } = await supabase
-      .from('photos')
-      .select('*')
-      .order('created_at', { ascending: false });
+  const fetchImages = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('photos')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Supabase error:', error);
-      throw error;
+      if (error) throw error;
+      setImages(data || []);
+    } catch (error) {
+      console.error('Error fetching images:', error.message);
     }
-    console.log('Fetched images:', data);
-    setImages(data || []);
-  } catch (error) {
-    console.error('Error fetching images:', error.message);
-  }
-};
+  };
 
   const uploadImage = async (file) => {
     try {
@@ -110,10 +107,9 @@ const fetchImages = async () => {
     }
   };
 
-  // Ensure we always have valid translations by falling back to English if needed
   const t = translations[currentLang] || translations.en;
 
-  const handleDrag = useCallback((e) => {
+  const handleDragEvent = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -122,40 +118,6 @@ const fetchImages = async () => {
       setIsDragging(false);
     }
   }, []);
-
-  const handleDrop = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-
-    const files = [...e.dataTransfer.files];
-    if (files && files.length > 0) {
-      const imageFiles = files.filter(file => file.type.startsWith('image/'));
-      const newImages = imageFiles.map(file => ({
-        id: Math.random().toString(36).substring(7),
-        url: URL.createObjectURL(file),
-        name: file.name,
-      }));
-      setImages(prev => [...prev, ...newImages]);
-    }
-  }, []);
-
-  const handleFileInput = useCallback((e) => {
-    const files = [...e.target.files];
-    if (files && files.length > 0) {
-      const imageFiles = files.filter(file => file.type.startsWith('image/'));
-      const newImages = imageFiles.map(file => ({
-        id: Math.random().toString(36).substring(7),
-        url: URL.createObjectURL(file),
-        name: file.name,
-      }));
-      setImages(prev => [...prev, ...newImages]);
-    }
-  }, []);
-
-  const removeImage = (id) => {
-    setImages(prev => prev.filter(img => img.id !== id));
-  };
 
   const toggleLayout = () => {
     setLayout(prev => prev === 'grid' ? 'masonry' : 'grid');
@@ -168,9 +130,9 @@ const fetchImages = async () => {
         className={`relative border-2 border-dashed rounded-lg p-8 mb-8 text-center transition-colors
           ${isDragging ? 'border-sage-400 bg-sage-50' : 'border-sage-200'}
           ${images.length === 0 ? 'h-64' : 'h-32'}`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
+        onDragEnter={handleDragEvent}
+        onDragLeave={handleDragEvent}
+        onDragOver={handleDragEvent}
         onDrop={handleDrop}
       >
         <Upload className="mx-auto mb-4 text-sage-400" size={24} />
@@ -222,12 +184,6 @@ const fetchImages = async () => {
               alt={image.name}
               className="w-full h-auto object-cover rounded-lg"
             />
-            <button
-              onClick={() => removeImage(image.id)}
-              className="absolute top-2 right-2 w-8 h-8 bg-charcoal-900/70 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
-            >
-              ×
-            </button>
           </div>
         ))}
       </div>
