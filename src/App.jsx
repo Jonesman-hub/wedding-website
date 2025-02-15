@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TabSystem from './components/TabSystem';
+import PhotoGallery from './components/PhotoGallery';
 import { RSVPForm, RSVPDashboard } from './components/RSVPForm';
 
 const translations = {
@@ -8,10 +9,10 @@ const translations = {
       home: "Home",
       photos: "Photos",
       party: "Wedding Party",
+      rsvp: "RSVP",
       qa: "Q + A",
       travel: "Travel",
       todo: "Things to Do",
-      rsvp: "RSVP",
       contact: "Contact"
     },
     hero: {
@@ -19,10 +20,6 @@ const translations = {
       names: "JONAH & JUDITH",
       location: "WÜRZBURG, GERMANY",
       countdown: "DAYS TO GO!"
-    },
-    tabs: {
-      form: "RSVP Form",
-      list: "Guest List"
     }
   },
   de: {
@@ -30,10 +27,10 @@ const translations = {
       home: "Start",
       photos: "Fotos",
       party: "Hochzeitsgesellschaft",
+      rsvp: "RSVP",
       qa: "F + A",
       travel: "Anreise",
       todo: "Aktivitäten",
-      rsvp: "RSVP",
       contact: "Kontakt"
     },
     hero: {
@@ -41,10 +38,6 @@ const translations = {
       names: "JONAH & JUDITH",
       location: "WÜRZBURG, DEUTSCHLAND",
       countdown: "TAGE BIS ZUR HOCHZEIT!"
-    },
-    tabs: {
-      form: "RSVP Formular",
-      list: "Gästeliste"
     }
   }
 };
@@ -53,34 +46,85 @@ function App() {
   const [currentLang, setCurrentLang] = useState('en');
   const [activeTab, setActiveTab] = useState('home');
   const [rsvpList, setRsvpList] = useState([]);
-  const [rsvpActiveTab, setRsvpActiveTab] = useState('form');
-  
   const t = translations[currentLang];
   
   const weddingDate = new Date('2025-07-19');
   const today = new Date();
   const daysUntil = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
-  
+
   const handleRSVPSubmit = (formData) => {
-    setRsvpList([...rsvpList, formData]);
+    setRsvpList(prev => [...prev, formData]);
   };
 
-  const rsvpTabs = [
+  const tabs = [
     {
-      id: 'form',
+      id: 'home',
       label: {
-        en: 'RSVP Form',
-        de: 'RSVP Formular'
+        en: 'Home',
+        de: 'Start'
       },
-      content: <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
+      content: null
     },
     {
-      id: 'list',
+      id: 'photos',
       label: {
-        en: 'Guest List',
-        de: 'Gästeliste'
+        en: 'Photos',
+        de: 'Fotos'
       },
-      content: <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
+      content: <PhotoGallery currentLang={currentLang} />
+    },
+    {
+      id: 'rsvp',
+      label: {
+        en: 'RSVP',
+        de: 'RSVP'
+      },
+      content: (
+        <div>
+          <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
+          <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
+        </div>
+      )
+    },
+    {
+      id: 'party',
+      label: {
+        en: 'Wedding Party',
+        de: 'Hochzeitsgesellschaft'
+      },
+      content: null // Add wedding party content here
+    },
+    {
+      id: 'qa',
+      label: {
+        en: 'Q + A',
+        de: 'F + A'
+      },
+      content: null // Add Q&A content here
+    },
+    {
+      id: 'travel',
+      label: {
+        en: 'Travel',
+        de: 'Anreise'
+      },
+      content: null // Add travel content here
+    },
+    {
+      id: 'todo',
+      label: {
+        en: 'Things to Do',
+        de: 'Aktivitäten'
+      },
+      content: null // Add things to do content here
+    },
+    {
+      id: 'contact',
+      label: {
+        en: 'Contact',
+        de: 'Kontakt'
+      },
+      content: null // Add contact content here
     }
   ];
 
@@ -117,10 +161,9 @@ function App() {
         </div>
       </nav>
 
-      {/* Content Sections */}
-      {activeTab === 'home' ? (
+      {/* Hero Section (only show on home tab) */}
+      {activeTab === 'home' && (
         <>
-          {/* Hero Section */}
           <div className="container mx-auto px-4 pt-32 pb-40 text-center">
             <p className="text-lg text-charcoal-700 mb-8 font-display italic tracking-wide">
               {t.hero.title}
@@ -156,21 +199,16 @@ function App() {
             </div>
           </div>
         </>
-      ) : activeTab === 'rsvp' ? (
-        <div className="py-16">
-          <TabSystem
-            activeTab={rsvpActiveTab}
-            setActiveTab={setRsvpActiveTab}
-            tabs={rsvpTabs}
-            currentLang={currentLang}
-          />
-        </div>
-      ) : (
-        <div className="container mx-auto px-4 py-16">
-          <h2 className="text-4xl font-display text-center">
-            {t.nav[activeTab]} Content Coming Soon
-          </h2>
-        </div>
+      )}
+
+      {/* Tab Content */}
+      {activeTab !== 'home' && (
+        <TabSystem
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          tabs={tabs}
+          currentLang={currentLang}
+        />
       )}
     </div>
   );
