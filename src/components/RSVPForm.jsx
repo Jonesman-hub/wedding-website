@@ -176,4 +176,86 @@ const RSVPForm = ({ onSubmit, currentLang }) => {
   );
 };
 
-export { RSVPForm };
+const RSVPDashboard = ({ rsvpList, currentLang }) => {
+  const translations = {
+    en: {
+      title: 'Guest List',
+      attending: 'Attending',
+      notAttending: 'Not Attending',
+      guestCount: 'Guest Count',
+      message: 'Message',
+      noRsvp: 'No RSVPs yet'
+    },
+    de: {
+      title: 'Gästeliste',
+      attending: 'Teilnehmend',
+      notAttending: 'Nicht Teilnehmend',
+      guestCount: 'Anzahl der Gäste',
+      message: 'Nachricht',
+      noRsvp: 'Noch keine RSVPs'
+    }
+  };
+
+  const t = translations[currentLang];
+
+  if (!rsvpList || rsvpList.length === 0) {
+    return (
+      <div className="max-w-2xl mx-auto mt-12 px-4">
+        <p className="text-center text-charcoal-700">{t.noRsvp}</p>
+      </div>
+    );
+  }
+
+  const attending = rsvpList.filter(rsvp => rsvp.attending === 'yes');
+  const notAttending = rsvpList.filter(rsvp => rsvp.attending === 'no');
+  const totalGuests = attending.reduce((sum, rsvp) => sum + rsvp.guestCount, 0);
+
+  return (
+    <div className="max-w-2xl mx-auto mt-12 px-4">
+      <h3 className="text-2xl font-display text-center mb-6">{t.title}</h3>
+      
+      <div className="space-y-8">
+        <div>
+          <h4 className="font-medium mb-4">{t.attending} ({attending.length})</h4>
+          <div className="space-y-4">
+            {attending.map((rsvp, index) => (
+              <div key={index} className="p-4 bg-white/80 border border-sage-300">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium">{rsvp.name}</p>
+                    <p className="text-sm text-charcoal-700">{t.guestCount}: {rsvp.guestCount}</p>
+                  </div>
+                </div>
+                {rsvp.message && (
+                  <p className="mt-2 text-sm text-charcoal-700">{rsvp.message}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {notAttending.length > 0 && (
+          <div>
+            <h4 className="font-medium mb-4">{t.notAttending} ({notAttending.length})</h4>
+            <div className="space-y-4">
+              {notAttending.map((rsvp, index) => (
+                <div key={index} className="p-4 bg-white/80 border border-sage-300">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium">{rsvp.name}</p>
+                    </div>
+                  </div>
+                  {rsvp.message && (
+                    <p className="mt-2 text-sm text-charcoal-700">{rsvp.message}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export { RSVPForm, RSVPDashboard };
