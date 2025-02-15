@@ -45,8 +45,15 @@ const RSVPForm = ({ onSubmit, currentLang }) => {
       });
     } catch (error) {
       console.error('Error submitting RSVP:', error.message);
-      // You might want to show an error message to the user here
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const translations = {
@@ -85,27 +92,6 @@ const RSVPForm = ({ onSubmit, currentLang }) => {
   };
 
   const t = translations[currentLang];
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-    setFormData({
-      name: '',
-      email: '',
-      attending: 'yes',
-      guestCount: 1,
-      dietaryRestrictions: '',
-      message: ''
-    });
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
@@ -190,135 +176,4 @@ const RSVPForm = ({ onSubmit, currentLang }) => {
   );
 };
 
-// RSVPDashboard.jsx
-const RSVPDashboard = ({ currentLang }) => {
-  const [rsvpList, setRsvpList] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchRSVPs();
-    
-    // Set up real-time subscription
-    const subscription = supabase
-      .channel('rsvps')
-      .on('postgres_changes', 
-          { event: 'INSERT', schema: 'public', table: 'rsvps' },
-          (payload) => {
-            setRsvpList(currentList => [...currentList, payload.new]);
-          }
-      )
-      .subscribe();
-
-    // Cleanup subscription
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  const fetchRSVPs = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('rsvps')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setRsvpList(data);
-    } catch (error) {
-      console.error('Error fetching RSVPs:', error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const translations = {
-    en: {
-      title: 'RSVP Dashboard',
-      stats: {
-        total: 'Total RSVPs',
-        attending: 'Attending',
-        declined: 'Declined',
-        totalGuests: 'Total Guests'
-      },
-      list: {
-        name: 'Name',
-        status: 'Status',
-        guests: 'Guests',
-        dietary: 'Dietary Notes'
-      }
-    },
-    de: {
-      title: 'RSVP Übersicht',
-      stats: {
-        total: 'Gesamt RSVPs',
-        attending: 'Zusagen',
-        declined: 'Absagen',
-        totalGuests: 'Gesamtzahl Gäste'
-      },
-      list: {
-        name: 'Name',
-        status: 'Status',
-        guests: 'Gäste',
-        dietary: 'Ernährungshinweise'
-      }
-    }
-  };
-
-  const t = translations[currentLang];
-
-  const stats = {
-    total: rsvpList.length,
-    attending: rsvpList.filter(rsvp => rsvp.attending === 'yes').length,
-    declined: rsvpList.filter(rsvp => rsvp.attending === 'no').length,
-    totalGuests: rsvpList.reduce((sum, rsvp) => sum + (rsvp.attending === 'yes' ? rsvp.guestCount : 0), 0)
-  };
-
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h2 className="text-4xl font-display text-center mb-12">{t.title}</h2>
-      
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        {Object.entries(stats).map(([key, value]) => (
-          <div key={key} className="bg-white/80 p-6 text-center">
-            <p className="text-3xl font-display mb-2">{value}</p>
-            <p className="text-sm text-charcoal-700 tracking-wide">{t.stats[key]}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* RSVP List */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-sage-300">
-              <th className="py-4 text-left">{t.list.name}</th>
-              <th className="py-4 text-left">{t.list.status}</th>
-              <th className="py-4 text-left">{t.list.guests}</th>
-              <th className="py-4 text-left">{t.list.dietary}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rsvpList.map((rsvp, index) => (
-              <tr key={index} className="border-b border-sage-100">
-                <td className="py-4">{rsvp.name}</td>
-                <td className="py-4">
-                  <span className={`px-2 py-1 text-sm ${
-                    rsvp.attending === 'yes' 
-                      ? 'bg-sage-100 text-charcoal-900' 
-                      : 'bg-champagne-100 text-charcoal-900'
-                  }`}>
-                    {rsvp.attending === 'yes' ? '✓' : '✕'}
-                  </span>
-                </td>
-                <td className="py-4">{rsvp.attending === 'yes' ? rsvp.guestCount : '-'}</td>
-                <td className="py-4 text-sm text-charcoal-700">{rsvp.dietaryRestrictions || '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-
-export { RSVPForm, RSVPDashboard };
+export { RSVPForm };
