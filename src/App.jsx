@@ -1,3 +1,4 @@
+// App.jsx
 import React, { useState } from 'react';
 import TabSystem from './components/TabSystem';
 import PhotoGallery from './components/PhotoGallery';
@@ -56,77 +57,21 @@ function App() {
     setRsvpList(prev => [...prev, formData]);
   };
 
-  const tabs = [
-    {
-      id: 'home',
-      label: {
-        en: 'Home',
-        de: 'Start'
-      },
-      content: null
-    },
-    {
-      id: 'photos',
-      label: {
-        en: 'Photos',
-        de: 'Fotos'
-      },
-      content: <PhotoGallery currentLang={currentLang} />
-    },
-    {
-      id: 'rsvp',
-      label: {
-        en: 'RSVP',
-        de: 'RSVP'
-      },
-      content: (
-        <div>
-          <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
-          <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
-        </div>
-      )
-    },
-    {
-      id: 'party',
-      label: {
-        en: 'Wedding Party',
-        de: 'Hochzeitsgesellschaft'
-      },
-      content: null // Add wedding party content here
-    },
-    {
-      id: 'qa',
-      label: {
-        en: 'Q + A',
-        de: 'F + A'
-      },
-      content: null // Add Q&A content here
-    },
-    {
-      id: 'travel',
-      label: {
-        en: 'Travel',
-        de: 'Anreise'
-      },
-      content: null // Add travel content here
-    },
-    {
-      id: 'todo',
-      label: {
-        en: 'Things to Do',
-        de: 'Aktivitäten'
-      },
-      content: null // Add things to do content here
-    },
-    {
-      id: 'contact',
-      label: {
-        en: 'Contact',
-        de: 'Kontakt'
-      },
-      content: null // Add contact content here
+  const getTabContent = (tabId) => {
+    switch(tabId) {
+      case 'photos':
+        return <PhotoGallery currentLang={currentLang} />;
+      case 'rsvp':
+        return (
+          <div>
+            <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
+            <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
+          </div>
+        );
+      default:
+        return null;
     }
-  ];
+  };
 
   return (
     <div className="min-h-screen bg-gradient-radial from-champagne-50 via-champagne-100 to-champagne-200">
@@ -203,12 +148,9 @@ function App() {
 
       {/* Tab Content */}
       {activeTab !== 'home' && (
-        <TabSystem
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          tabs={tabs}
-          currentLang={currentLang}
-        />
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          {getTabContent(activeTab)}
+        </div>
       )}
     </div>
   );
