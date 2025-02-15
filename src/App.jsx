@@ -61,6 +61,26 @@ function App() {
   const today = new Date();
   const daysUntil = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
 
+  const tabs = [
+    {
+      id: 'home',
+      label: {
+        en: 'Home',
+        de: 'Start'
+      },
+      content: null // You can add home content here
+    },
+    {
+      id: 'photos',
+      label: {
+        en: 'Photos',
+        de: 'Fotos'
+      },
+      content: <PhotoGallery currentLang={currentLang} />
+    },
+    // Add other tabs as needed
+  ];
+  
   const handleRSVPSubmit = (formData) => {
     setRsvpList([...rsvpList, formData]);
   };
