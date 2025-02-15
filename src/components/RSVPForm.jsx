@@ -1,5 +1,6 @@
 // RSVPForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../supabase';
 
 const RSVPForm = ({ onSubmit, currentLang }) => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,43 @@ const RSVPForm = ({ onSubmit, currentLang }) => {
     dietaryRestrictions: '',
     message: ''
   });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Insert the RSVP into Supabase
+      const { data, error } = await supabase
+        .from('rsvps')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            attending: formData.attending,
+            guest_count: formData.guestCount,
+            dietary_restrictions: formData.dietaryRestrictions,
+            message: formData.message
+          }
+        ]);
+
+      if (error) throw error;
+
+      // Call the original onSubmit
+      onSubmit(formData);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        attending: 'yes',
+        guestCount: 1,
+        dietaryRestrictions: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error submitting RSVP:', error.message);
+      // You might want to show an error message to the user here
+    }
+  };
 
   const translations = {
     en: {
@@ -153,7 +191,45 @@ const RSVPForm = ({ onSubmit, currentLang }) => {
 };
 
 // RSVPDashboard.jsx
-const RSVPDashboard = ({ rsvpList, currentLang }) => {
+const RSVPDashboard = ({ currentLang }) => {
+  const [rsvpList, setRsvpList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRSVPs();
+    
+    // Set up real-time subscription
+    const subscription = supabase
+      .channel('rsvps')
+      .on('postgres_changes', 
+          { event: 'INSERT', schema: 'public', table: 'rsvps' },
+          (payload) => {
+            setRsvpList(currentList => [...currentList, payload.new]);
+          }
+      )
+      .subscribe();
+
+    // Cleanup subscription
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const fetchRSVPs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('rsvps')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setRsvpList(data);
+    } catch (error) {
+      console.error('Error fetching RSVPs:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   const translations = {
     en: {
       title: 'RSVP Dashboard',
