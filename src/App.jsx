@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import TabSystem from './components/TabSystem';
 import PhotoGallery from './components/PhotoGallery';
-import { RSVPForm, RSVPDashboard } from './components/RSVPForm';
+import { RSVPForm } from './components/RSVPForm';
 import HomePage from './components/HomePage';
 import TravelPage from './components/TravelPage';
 
@@ -48,12 +48,9 @@ function App() {
       case 'photos':
         return <PhotoGallery currentLang={currentLang} />;
       case 'rsvp':
-        return (
-          <div>
-            <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />
-            <RSVPDashboard rsvpList={rsvpList} currentLang={currentLang} />
-          </div>
-        );
+        return <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />;
+      case 'travel':
+        return <TravelPage currentLang={currentLang} />;
       default:
         return null;
     }
@@ -92,15 +89,14 @@ function App() {
         </div>
       </nav>
 
-      {/* Home Page */}
-      {activeTab === 'home' && <HomePage currentLang={currentLang} />}
-
       {/* Tab Content */}
-      {activeTab !== 'home' && (
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          {getTabContent(activeTab)}
-        </div>
-      )}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {activeTab === 'home' ? (
+          <HomePage currentLang={currentLang} />
+        ) : (
+          getTabContent(activeTab)
+        )}
+      </div>
     </div>
   );
 }
