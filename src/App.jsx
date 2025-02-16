@@ -4,6 +4,7 @@ import TabSystem from './components/TabSystem';
 import PhotoGallery from './components/PhotoGallery';
 import { RSVPForm, RSVPDashboard } from './components/RSVPForm';
 import HomePage from './components/HomePage';
+import TravelPage from './components/TravelPage';
 
 const translations = {
   en: {
