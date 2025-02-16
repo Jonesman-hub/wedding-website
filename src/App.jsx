@@ -6,6 +6,7 @@ import { RSVPForm } from './components/RSVPForm';
 import HomePage from './components/HomePage';
 import TravelPage from './components/TravelPage';
 import ContactPage from './components/ContactPage';
+import PartyPage from './components/PartyPage';
 
 const translations = {
   en: {
