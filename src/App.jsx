@@ -7,6 +7,7 @@ import HomePage from './components/HomePage';
 import TravelPage from './components/TravelPage';
 import ContactPage from './components/ContactPage';
 import PartyPage from './components/PartyPage';
+import ThingsToDoPage from './components/ThingsToDoPage';
 
 const translations = {
   en: {
