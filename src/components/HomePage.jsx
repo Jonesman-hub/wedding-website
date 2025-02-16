@@ -1,79 +1,95 @@
 import React from 'react';
-import { Heart, Calendar, MapPin, Clock } from 'lucide-react';
+import { Heart, Calendar, MapPin } from 'lucide-react';
 
-const HomePage = () => {
-  const weddingDate = new Date('2025-07-19');
-  const today = new Date();
-  const daysUntil = Math.ceil((weddingDate - today) / (1000 * 60 * 60 * 24));
+const translations = {
+  en: {
+    title: "Jonah & Judith",
+    subtitle: "We're getting married!",
+    date: "July 19, 2025",
+    location: "Würzburg, Germany",
+    welcome: {
+      title: "Welcome to Our Wedding Website",
+      message: "We are excited to share our special day with you! Here you'll find all the information about our wedding celebration.",
+    },
+    countdown: {
+      days: "Days",
+      hours: "Hours",
+      minutes: "Minutes",
+      seconds: "Seconds",
+      until: "until we say 'I do'",
+    },
+    navigation: {
+      message: "Use the navigation menu above to find details about:",
+      items: [
+        "Travel information and accommodation",
+        "Wedding party details and schedule",
+        "Things to do in Würzburg",
+        "Photo gallery",
+        "RSVP form"
+      ]
+    }
+  },
+  de: {
+    title: "Jonah & Judith",
+    subtitle: "Wir heiraten!",
+    date: "19. Juli 2025",
+    location: "Würzburg, Deutschland",
+    welcome: {
+      title: "Willkommen auf unserer Hochzeitswebsite",
+      message: "Wir freuen uns darauf, unseren besonderen Tag mit euch zu teilen! Hier findet ihr alle Informationen zu unserer Hochzeitsfeier.",
+    },
+    countdown: {
+      days: "Tage",
+      hours: "Stunden",
+      minutes: "Minuten",
+      seconds: "Sekunden",
+      until: "bis wir 'Ja' sagen",
+    },
+    navigation: {
+      message: "Im Navigationsmenü oben findet ihr Details zu:",
+      items: [
+        "Anreise und Unterkünfte",
+        "Hochzeitsgesellschaft und Zeitplan",
+        "Aktivitäten in Würzburg",
+        "Fotogalerie",
+        "RSVP-Formular"
+      ]
+    }
+  }
+};
+
+const HomePage = ({ currentLang = 'en' }) => {
+  const t = translations[currentLang];
 
   return (
-    <div className="min-h-screen bg-gradient-radial from-champagne-50 via-champagne-100 to-champagne-200">
-      {/* Hero Section */}
-      <div className="text-center py-32 px-4">
-        <h1 className="text-5xl md:text-7xl text-charcoal-900 mb-6 font-display">
-          JONAH & JUDITH
-        </h1>
-        <p className="text-lg text-charcoal-700 mb-8 font-display italic tracking-wide">
-          Are getting married!
-        </p>
-        <div className="flex items-center justify-center space-x-3 text-charcoal-700">
-          <Calendar className="w-5 h-5" />
-          <p className="text-sm tracking-widest font-light">JULY 19, 2025</p>
+    <div className="max-w-4xl mx-auto px-4 py-8 text-center">
+      <h1 className="text-5xl font-display mb-4">{t.title}</h1>
+      <h2 className="text-2xl font-display mb-8">{t.subtitle}</h2>
+
+      <div className="flex justify-center items-center gap-4 mb-12">
+        <div className="flex items-center gap-2">
+          <Calendar className="h-5 w-5 text-sage-400" />
+          <span>{t.date}</span>
+        </div>
+        <Heart className="h-5 w-5 text-sage-400" />
+        <div className="flex items-center gap-2">
+          <MapPin className="h-5 w-5 text-sage-400" />
+          <span>{t.location}</span>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        {/* Our Story Section */}
-        <div className="mb-16 text-center">
-          <h2 className="text-4xl mb-6 font-display text-charcoal-900">Our Story</h2>
-          <p className="text-lg leading-relaxed text-charcoal-700">
-            From Würzburg to forever - our journey began in the heart of Germany...
-          </p>
-        </div>
-
-        {/* Event Details */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="text-center p-8 bg-white/80 border border-sage-200">
-            <h3 className="text-2xl mb-6 font-display text-charcoal-900">Ceremony</h3>
-            <div className="flex flex-col items-center space-y-4">
-              <Clock className="w-5 h-5 text-sage-400" />
-              <p className="text-charcoal-700">15:00</p>
-              <MapPin className="w-5 h-5 text-sage-400" />
-              <p className="text-charcoal-700">Würzburg Cathedral</p>
-            </div>
-          </div>
-          <div className="text-center p-8 bg-white/80 border border-sage-200">
-            <h3 className="text-2xl mb-6 font-display text-charcoal-900">Reception</h3>
-            <div className="flex flex-col items-center space-y-4">
-              <Clock className="w-5 h-5 text-sage-400" />
-              <p className="text-charcoal-700">17:00</p>
-              <MapPin className="w-5 h-5 text-sage-400" />
-              <p className="text-charcoal-700">Würzburg Residence</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Links */}
-        <div className="grid md:grid-cols-3 gap-4 text-center">
-          <button className="p-4 bg-white/80 border border-sage-200 hover:bg-sage-100 transition-colors text-charcoal-700">
-            RSVP
-          </button>
-          <button className="p-4 bg-white/80 border border-sage-200 hover:bg-sage-100 transition-colors text-charcoal-700">
-            Travel Info
-          </button>
-          <button className="p-4 bg-white/80 border border-sage-200 hover:bg-sage-100 transition-colors text-charcoal-700">
-            Photo Gallery
-          </button>
-        </div>
+      <div className="bg-white p-8 shadow-md mb-12">
+        <h3 className="text-2xl font-display mb-4">{t.welcome.title}</h3>
+        <p className="text-charcoal-700 mb-6">{t.welcome.message}</p>
       </div>
 
-      {/* Countdown Section */}
-      <div className="text-center py-16 bg-gradient-radial from-sage-100/20 via-sage-200/10 to-transparent">
-        <Heart className="w-6 h-6 mx-auto mb-4 text-sage-400" />
-        <p className="text-sm tracking-widest text-charcoal-700 font-light">
-          {daysUntil} DAYS TO GO!
-        </p>
+      <div className="bg-white p-8 shadow-md mb-12">
+        <p className="text-lg mb-4">{t.navigation.message}</p>
+        <ul className="space-y-2 text-charcoal-700">
+          {t.navigation.items.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
