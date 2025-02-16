@@ -48,10 +48,14 @@ function App() {
     switch(tabId) {
       case 'photos':
         return <PhotoGallery currentLang={currentLang} />;
+      case 'party':
+        return <PartyPage currentLang={currentLang} />;
       case 'rsvp':
         return <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />;
       case 'travel':
         return <TravelPage currentLang={currentLang} />;
+      case 'todo':
+        return <ThingsToDoPage currentLang={currentLang} />;
       case 'contact':
         return <ContactPage currentLang={currentLang} />;
       default:
