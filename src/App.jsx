@@ -5,7 +5,7 @@ import PhotoGallery from './components/PhotoGallery';
 import { RSVPForm } from './components/RSVPForm';
 import HomePage from './components/HomePage';
 import TravelPage from './components/TravelPage';
-import ContactPage from './components/ContactPage.jsx';
+import ContactPage from './components/ContactPage';
 
 const translations = {
   en: {
@@ -52,6 +52,8 @@ function App() {
         return <RSVPForm onSubmit={handleRSVPSubmit} currentLang={currentLang} />;
       case 'travel':
         return <TravelPage currentLang={currentLang} />;
+      case 'contact':
+        return <ContactPage currentLang={currentLang} />;
       default:
         return null;
     }
@@ -95,7 +97,7 @@ function App() {
         {activeTab === 'home' ? (
           <HomePage currentLang={currentLang} />
         ) : (
-          getTabContent(activeTab)
+          <TabSystem content={getTabContent(activeTab)} />
         )}
       </div>
     </div>
