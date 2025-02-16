@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Calendar, Plane, Hotel, Train, Bus } from 'lucide-react';
 
 const translations = {
@@ -59,94 +58,88 @@ const TravelPage = ({ currentLang = 'en' }) => {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Important Dates */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="bg-white p-6 shadow-md">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
             <Calendar className="h-5 w-5" />
             {t.dates.title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-semibold mb-2">{t.dates.wedding}</h3>
-              <p>{t.dates.weddingDate}</p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">{t.dates.arrival}</h3>
-              <p>{t.dates.arrivalInfo}</p>
-            </div>
+          </h2>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-semibold mb-2">{t.dates.wedding}</h3>
+            <p>{t.dates.weddingDate}</p>
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <h3 className="font-semibold mb-2">{t.dates.arrival}</h3>
+            <p>{t.dates.arrivalInfo}</p>
+          </div>
+        </div>
+      </div>
 
       {/* Travel Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="bg-white p-6 shadow-md">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
             <Plane className="h-5 w-5" />
             {t.travel.title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-semibold mb-2">{t.travel.airports}</h3>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Frankfurt Airport (FRA) - 1.5 hours by train</li>
-                <li>Nuremberg Airport (NUE) - 2 hours by train</li>
-                <li>Munich Airport (MUC) - 3 hours by train</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Train className="h-5 w-5" />
-                <h3 className="font-semibold">{t.travel.deutschlandTicket}</h3>
-              </div>
-              <p>{t.travel.ticketInfo}</p>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Bus className="h-5 w-5" />
-                <h3 className="font-semibold">{t.travel.localTransport}</h3>
-              </div>
-              <p>{t.travel.busInfo}</p>
-            </div>
+          </h2>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-semibold mb-2">{t.travel.airports}</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Frankfurt Airport (FRA) - 1.5 hours by train</li>
+              <li>Nuremberg Airport (NUE) - 2 hours by train</li>
+              <li>Munich Airport (MUC) - 3 hours by train</li>
+            </ul>
           </div>
-        </CardContent>
-      </Card>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Train className="h-5 w-5" />
+              <h3 className="font-semibold">{t.travel.deutschlandTicket}</h3>
+            </div>
+            <p>{t.travel.ticketInfo}</p>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Bus className="h-5 w-5" />
+              <h3 className="font-semibold">{t.travel.localTransport}</h3>
+            </div>
+            <p>{t.travel.busInfo}</p>
+          </div>
+        </div>
+      </div>
 
       {/* Accommodations */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+      <div className="bg-white p-6 shadow-md">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
             <Hotel className="h-5 w-5" />
             {t.accommodation.title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-semibold mb-2">{t.accommodation.hotelOptions}</h3>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>
-                  <span className="font-medium">Altstadt Hotel</span> - Budget-friendly option in the city center
-                </li>
-                <li>
-                  <span className="font-medium">Barthels Boutique</span> - Mid-range hotel with beautiful city views
-                </li>
-                <li>
-                  <span className="font-medium">Burkardushaus Würzburg</span> - Luxury accommodation with premium amenities
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">{t.accommodation.alternative}</h3>
-              <p>{t.accommodation.altText}</p>
-            </div>
+          </h2>
+        </div>
+        <div className="space-y-4">
+          <div>
+            <h3 className="font-semibold mb-2">{t.accommodation.hotelOptions}</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              <li>
+                <span className="font-medium">Altstadt Hotel</span> - Budget-friendly option in the city center
+              </li>
+              <li>
+                <span className="font-medium">Barthels Boutique</span> - Mid-range hotel with beautiful city views
+              </li>
+              <li>
+                <span className="font-medium">Burkardushaus Würzburg</span> - Luxury accommodation with premium amenities
+              </li>
+            </ul>
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <h3 className="font-semibold mb-2">{t.accommodation.alternative}</h3>
+            <p>{t.accommodation.altText}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
