@@ -14,7 +14,6 @@ const translations = {
       photos: "Photos",
       party: "Wedding Party",
       rsvp: "RSVP",
-      qa: "Q + A",
       travel: "Travel",
       todo: "Things to Do",
       contact: "Contact"
@@ -26,7 +25,6 @@ const translations = {
       photos: "Fotos",
       party: "Hochzeitsgesellschaft",
       rsvp: "RSVP",
-      qa: "F + A",
       travel: "Anreise",
       todo: "Aktivitäten",
       contact: "Kontakt"
