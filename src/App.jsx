@@ -5,7 +5,7 @@ import PhotoGallery from './components/PhotoGallery';
 import { RSVPForm } from './components/RSVPForm';
 import HomePage from './components/HomePage';
 import TravelPage from './components/TravelPage';
-import ContactPage from './components/ContactPage';
+import ContactPage from './components/ContactPage.jsx';
 
 const translations = {
   en: {
